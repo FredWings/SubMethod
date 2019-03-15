@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoWindowWndProc", "NoWindow
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WndFormEventLoadOnce", "WndFormEventLoadOnce\WndFormEventLoadOnce.csproj", "{D6BFE336-F789-4823-9A27-F18C269FBF15}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Weekly", "Weekly\Weekly.csproj", "{D750A2A3-357B-4CDC-A09E-2D3094AB7961}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{D6BFE336-F789-4823-9A27-F18C269FBF15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6BFE336-F789-4823-9A27-F18C269FBF15}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6BFE336-F789-4823-9A27-F18C269FBF15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D750A2A3-357B-4CDC-A09E-2D3094AB7961}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D750A2A3-357B-4CDC-A09E-2D3094AB7961}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D750A2A3-357B-4CDC-A09E-2D3094AB7961}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D750A2A3-357B-4CDC-A09E-2D3094AB7961}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
