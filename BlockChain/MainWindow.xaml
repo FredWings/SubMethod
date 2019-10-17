@@ -1,0 +1,320 @@
+﻿<metro:MetroWindow x:Class="BlockChain.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BlockChain"
+        xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+                   xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                   xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                   xmlns:helper="clr-namespace:BlockChain.Helper"
+        mc:Ignorable="d"
+        Title="区块链投资记录" Height="450" Width="800"
+                   WindowStartupLocation="CenterScreen"
+                   WindowState="Maximized">
+    <Grid>
+        <Grid.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Themes/HamburgerMenuTemplate.xaml" />
+                </ResourceDictionary.MergedDictionaries>
+
+                <helper:ProfitConverter x:Key="cvProfit" />
+                <helper:MoneyConverter x:Key="cvMoney" />
+
+                <!--  This is the template for all menu items. In this sample we use the glyph items.  -->
+                <DataTemplate x:Key="HamburgerMenuItem"
+                              DataType="{x:Type metro:HamburgerMenuGlyphItem}">
+                    <DockPanel Height="48"
+                               LastChildFill="True">
+                        <Grid x:Name="IconPart"
+                              Width="48"
+                              DockPanel.Dock="Left">
+                            <Image Margin="12"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Source="{Binding Glyph}"
+                                   Stretch="UniformToFill" />
+                        </Grid>
+                        <TextBlock x:Name="TextPart"
+                                   VerticalAlignment="Center"
+                                   FontSize="16"
+                                   Text="{Binding CoinName}" />
+                    </DockPanel>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type metro:HamburgerMenu}}, Path=PanePlacement}"
+                                     Value="Right">
+                            <Setter TargetName="IconPart"
+                                    Property="DockPanel.Dock"
+                                    Value="Right" />
+                            <Setter TargetName="TextPart"
+                                    Property="Margin"
+                                    Value="8 0 0 0" />
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+
+                <!--  This is the template for all option menu items.  -->
+                <DataTemplate x:Key="HamburgerOptionsMenuItem"
+                              DataType="{x:Type metro:HamburgerMenuItem}">
+                    <DockPanel Height="48"
+                               LastChildFill="True">
+                        <ContentControl x:Name="IconPart"
+                                        Width="48"
+                                        Content="{Binding Tag}"
+                                        DockPanel.Dock="Left"
+                                        Focusable="False"
+                                        IsTabStop="False" />
+                        <TextBlock x:Name="TextPart"
+                                   VerticalAlignment="Center"
+                                   FontSize="16"
+                                   Text="{Binding Label}" />
+                    </DockPanel>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type metro:HamburgerMenu}}, Path=PanePlacement}"
+                                     Value="Right">
+                            <Setter TargetName="IconPart"
+                                    Property="DockPanel.Dock"
+                                    Value="Right" />
+                            <Setter TargetName="TextPart"
+                                    Property="Margin"
+                                    Value="8 0 0 0" />
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+            </ResourceDictionary>
+        </Grid.Resources>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="auto" />
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0"
+                BorderBrush="{DynamicResource GrayBrush7}"
+                BorderThickness="1">
+            <metro:HamburgerMenu x:Name="HamburgerMenuControl"
+                                 HamburgerWidth="48"
+                                 IsPaneOpen="True"
+                                 ItemTemplate="{StaticResource HamburgerMenuItem}"
+                                 OptionsItemTemplate="{StaticResource HamburgerOptionsMenuItem}"
+                                 SelectedIndex="1"
+                                 VerticalScrollBarOnLeftSide="False"
+                                 ItemsSource="{Binding AllCoins}"
+                                 Content="{Binding HamContent}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="ItemClick">
+                        <helper:EventCommand Command="{Binding ItemClickCommand}"
+                                             CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=InvokeParameter}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+
+                <!--Header-->
+                <metro:HamburgerMenu.HamburgerMenuHeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   FontSize="16"
+                                   Foreground="White"
+                                   Text="Coins" />
+                    </DataTemplate>
+                </metro:HamburgerMenu.HamburgerMenuHeaderTemplate>
+
+                <!--Item-->
+
+                <!--Options-->
+                <metro:HamburgerMenu.OptionsItemsSource>
+                    <metro:HamburgerMenuItemCollection>
+                        <metro:HamburgerMenuGlyphItem Command="{Binding AboutCommand}"
+                                                      Label="About">
+                            <metro:HamburgerMenuGlyphItem.Tag>
+                                <iconPacks:PackIconMaterial Width="22"
+                                                            Height="22"
+                                                            HorizontalAlignment="Center"
+                                                            VerticalAlignment="Center"
+                                                            Kind="Help" />
+                            </metro:HamburgerMenuGlyphItem.Tag>
+                        </metro:HamburgerMenuGlyphItem>
+                    </metro:HamburgerMenuItemCollection>
+                </metro:HamburgerMenu.OptionsItemsSource>
+
+                <!--  Content  -->
+                <metro:HamburgerMenu.ContentTemplate>
+                    <DataTemplate>
+                        <Grid x:Name="ContentGrid">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="48" />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Border Grid.Row="0"
+                                    Margin="-1 0 -1 0"
+                                    Background="#9966FF">
+                                <Grid>
+                                <TextBlock x:Name="Header"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           FontSize="24"
+                                           Foreground="White"
+                                           Text="{Binding CoinName}" />
+                                <TextBlock 
+                                           HorizontalAlignment="Right"
+                                           VerticalAlignment="Center"
+                                           FontSize="24"
+                                           Foreground="White"
+                                           Text="{Binding MsgTip}" />
+                                </Grid>
+                            </Border>
+                            <!--#region 每笔价格-->
+                            <ScrollViewer Grid.Row="1">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="KeyDown">
+                                        <helper:EventCommand Command="{ Binding KeyDownCommand}"
+                                                             CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=InvokeParameter}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                                <ItemsControl Name="Details"
+                                              ItemsSource="{Binding TradeDetails}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel Orientation="Horizontal">
+                                            </WrapPanel>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <WrapPanel>
+                                                <TextBox Width="100"
+                                                         Height="25"
+                                                         Text="{Binding InTotalAmo, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource cvMoney}}"
+                                                         BorderBrush="{Binding InTotalAmo, Converter={StaticResource cvProfit}}"
+                                                         Name="tbAmo"
+                                                         Margin="3,0" />
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="GotFocus">
+                                                        <i:InvokeCommandAction Command="{Binding DataContext.GotFocusCommand, RelativeSource={RelativeSource  AncestorType=ItemsControl, Mode=FindAncestor, AncestorLevel=1}}" 
+                                                                               CommandParameter="{Binding ElementName=tbAmo}"/>
+                                                    </i:EventTrigger>
+                                                    <i:EventTrigger EventName="KeyDown">
+                                                        <helper:EventCommand Command="{ Binding KeyDownCommand}"
+                                                                             CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=InvokeParameter}" />
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                            </WrapPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                            <!--#endregion-->
+                        </Grid>
+                    </DataTemplate>
+                </metro:HamburgerMenu.ContentTemplate>
+
+            </metro:HamburgerMenu>
+        </Border>
+    </Grid>
+
+    <metro:MetroWindow.Flyouts>
+        <metro:FlyoutsControl>
+            <metro:FlyoutsControl.Resources>
+                <helper:MoneyConverter x:Key="cvMoney" />
+            </metro:FlyoutsControl.Resources>
+            <metro:Flyout Margin="0,80,0,0"
+                          AreAnimationsEnabled="True"
+                          Header="详细信息"
+                          Position="Right"
+                          IsOpen="{Binding ElementName=HamburgerMenuControl, Path=Content.FlyIsOpen}"
+                          DataContext="{Binding ElementName=HamburgerMenuControl, Path=Content.TradeDetail}">
+                <ScrollViewer>
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="50" />
+                    </Grid.RowDefinitions>
+                                        
+                    <StackPanel Orientation="Horizontal"
+                                Grid.Row="0">
+                        <TextBlock Text="名称：" 
+                                   VerticalAlignment="Center"
+                                   Width="70"
+                                   HorizontalAlignment="Right"/>
+                        <TextBox Text="{Binding CoinName, UpdateSourceTrigger=PropertyChanged}" 
+                                 Width="100"
+                                 Height="25"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal"
+                                Grid.Row="1">
+                        <TextBlock Text="单价：" 
+                                   VerticalAlignment="Center"
+                                   Width="70"
+                                   HorizontalAlignment="Right"/>
+                            <TextBox Text="{Binding BidPrice, Converter={StaticResource cvMoney}}" 
+                                 Width="100"
+                                 Height="25"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal"
+                                Grid.Row="2">
+                        <TextBlock Text="实际数量："
+                                   VerticalAlignment="Center"
+                                   Width="70"
+                                   HorizontalAlignment="Right" />
+                        <TextBox Text="{Binding AcutalVolume, UpdateSourceTrigger=PropertyChanged}"
+                                 Width="100"
+                                 Height="25" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal"
+                                Grid.Row="3">
+                        <TextBlock Text="总价："
+                                   VerticalAlignment="Center"
+                                   Width="70"
+                                   HorizontalAlignment="Right" />
+                            <TextBox Text="{Binding InTotalAmo, Converter={StaticResource cvMoney}}"
+                                 Width="100"
+                                 Height="25" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal"
+                                Grid.Row="4">
+                        <TextBlock Text="交易对："
+                                   VerticalAlignment="Center"
+                                   Width="70"
+                                   HorizontalAlignment="Right" />
+                        <TextBox Text="{Binding DealType}"
+                                 Width="100"
+                                 Height="25" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal"
+                                Grid.Row="5">
+                        <TextBlock Text="买/卖-数量："
+                                   VerticalAlignment="Center"
+                                   Width="70"
+                                   HorizontalAlignment="Right" />
+                        <TextBox Text="{Binding BidVolume}"
+                                 Width="100"
+                                 Height="25" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal"
+                                Grid.Row="6">
+                        <TextBlock Text="交易时间："
+                                   VerticalAlignment="Center"
+                                   Width="70"
+                                   HorizontalAlignment="Right" />
+                            <TextBox Text="{Binding TradeTime}"
+                                 Width="100"
+                                 Height="25" />
+                    </StackPanel>
+                </Grid>
+                </ScrollViewer>
+            </metro:Flyout>
+        </metro:FlyoutsControl>
+    </metro:MetroWindow.Flyouts>
+</metro:MetroWindow>
